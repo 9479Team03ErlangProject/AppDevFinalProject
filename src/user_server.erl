@@ -1,5 +1,5 @@
 %%%-------------------------------------------------------------------
-%%% @author Maglaqui Kevin Roy
+%%% @author Christian Lucina
 %%% @copyright (C) 2024, <COMPANY>
 %%% @doc
 %%%  This module provides a simple in-memory user authentication system
@@ -10,7 +10,7 @@
 %%%-------------------------------------------------------------------
 
 -module(user_server). % Declares the name of the module as 'user_server'.
--author("Maglaqui Kevin Roy"). % Declares the author's name.
+-author("Christian Lucina"). % Declares the author's name.
 -export([start/0, register_user/2, authenticate_user/2, stop/0]).
 
 
