@@ -10,17 +10,24 @@ permissions:
   contents: read
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
-    container:
-      image: erlang:22.0.7
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Compile
-      run: rebar3 compile
-    - name: Run tests
-      run: rebar3 do eunit, ct
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Erlang
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 25.0
+          rebar3-version: 3.18.0
+
+      - name: Compile
+        run: rebar3 compile
+
+      - name: Run Unit Tests
+        run: rebar3 eunit
+
+      - name: Run Common Tests
+        run: rebar3 ct
