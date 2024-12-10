@@ -13,22 +13,26 @@
 -export([start/1, join/2, leave/2, send_message/2, crash_recovery/1]).
 
 %% Helper function to ensure consistent RoomName conversion
-to_atom(RoomName) when is_list(RoomName) -> list_to_atom(RoomName);
-to_atom(RoomName) -> RoomName.
+to_atom(RoomName) when is_list(RoomName) ->
+  list_to_atom(RoomName);
+to_atom(RoomName) ->
+  RoomName.
 
+%% Starts the chat room process
 start(RoomName) ->
   process_flag(trap_exit, true),
   RoomAtom = to_atom(RoomName),
   register(RoomAtom, spawn(fun() -> loop(RoomAtom, []) end)).
 
+%% Main loop for handling chat room messages
 loop(RoomName, Members) ->
   receive
     {join, User} ->
-      io:format("~s joined ~s~n", [User, atom_to_list(RoomName)]),
-      loop(RoomName, [User | Members]);
+      io:format("~s joined ~s~n", [User , atom_to_list(RoomName)]),
+      loop(RoomName, [User  | Members]);
 
     {leave, User} ->
-      io:format("~s left ~s~n", [User, atom_to_list(RoomName)]),
+      io:format("~s left ~s~n", [User , atom_to_list(RoomName)]),
       loop(RoomName, lists:delete(User, Members));
 
     {message, User, Message} ->
@@ -41,17 +45,21 @@ loop(RoomName, Members) ->
       crash_recovery(RoomName)
   end.
 
+%% Allows a user to join the chat room
 join(RoomName, User) ->
   RoomAtom = to_atom(RoomName),
   RoomAtom ! {join, User}.
 
+%% Allows a user to leave the chat room
 leave(RoomName, User) ->
   to_atom(RoomName) ! {leave, User}.
 
-send_message(RoomName, {User, Message}) ->
+%% Sends a message from a user to the chat room
+send_message(RoomName, {User , Message}) ->
   RoomAtom = to_atom(RoomName),
   RoomAtom ! {message, User, Message}.
 
+%% Handles crash recovery for the chat room
 crash_recovery(RoomName) ->
   io:format("Recovering chat room ~s~n", [RoomName]),
   start(RoomName).
