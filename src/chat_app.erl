@@ -1,21 +1,24 @@
+
 %%%-------------------------------------------------------------------
-%%% @author Lei Bagsan
+%%% @author Lei Ceasar Bagsan
 %%% @copyright (C) 2024, <COMPANY>
 %%% @doc
-%%%  This module implements a simple chat room functionality. It allows users
-%%%  to join or leave a room, send messages, and handle crashes with recovery.
+%%%  This module implements a high-level interface for a chat application.
+%%%  It integrates user authentication and chat room functionalities.
 %%% @end
-%%% Created : 09, Dec 2024 4:00 pm
+%%% Created : 01. Dec 2024 5:27 pm
 %%%-------------------------------------------------------------------
 
+
 -module(chat_app).
--author("Lei Bagsan").
+-author("Lei Ceasar Bagsan").
 -export([start/0, register_user/2, login/2, join_room/2, send_message/3]).
+
+
 
 
 % Starts the chat application by initializing the user server.
 start() ->
-  user_server:initialize(),
   user_server:start(),
   io:format("Chat application started.~n").
 
@@ -41,6 +44,8 @@ login(Username, Password) ->
 join_room(Username, RoomName) ->
   chat_room:start(RoomName),
   chat_room:join(RoomName, Username).
+
+
 
 
 % Sends a message from a user to a chat room.
